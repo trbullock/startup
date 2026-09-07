@@ -1,4 +1,4 @@
-# BYU Marketplace
+# BYU Housing Marketplace
 
 [My Notes](notes.md)
 
