@@ -1,4 +1,4 @@
-# Your startup name here
+# BYU Marketplace
 
 [My Notes](notes.md)
 

@@ -11,6 +11,10 @@ This file represents what I have learned about web programming.
 - [Canvas](https://byu.instructure.com)
 - [MDN](https://developer.mozilla.org)
 
+## Git
+
+So far I have learned how I am able to commit things into my github repository
+
 ## AWS
 
 Interesting things I have learned about AWS
