@@ -38,12 +38,12 @@ sequenceDiagram
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - Uses correct HTML structure for application. 3 Pages(One for login, one for posting, and one for viewing the map).
+- **CSS** - Styling that works on all screen sizes and looks good.
+- **React** - Allows user to interact with all the different key features stated above
+- **Service** - Retrieving recent catches and submitting catches
+- **DB/Login** - I will use a database to store login information as well as all the different information 
+- **WebSocket** - As people post their catches, it will be shown to other users
 
 ## 🚀 Specification Deliverable
 
