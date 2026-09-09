@@ -1,4 +1,4 @@
-# BYU Housing Marketplace
+# Fishing Tracker
 
 [My Notes](notes.md)
 
@@ -12,7 +12,7 @@ A brief description of the application here. Lorem ipsum dolor sit amet, consect
 
 ### Elevator pitch
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+As a fisherman I have found that whenever you catch a good sized fish, you want to share that with your friends. The Fishing Tracker app will allow you to connect with people you know and share the adventures that you have been on. Once you have created an account you have the ability to post pictures and messages. There will also be an option to view information on local lakes and fishing spots that include recommended tactics to catch fish.
 
 ### Design
 
