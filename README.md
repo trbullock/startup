@@ -29,9 +29,10 @@ sequenceDiagram
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Secure Login
+- Ability to view other people's catches
+- Ability to post your own catch
+- Map showing most popular lakes
 
 ### Technologies
 
