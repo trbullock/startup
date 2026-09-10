@@ -1,4 +1,4 @@
-# Fishing Tracker
+# Fish Tracker
 
 [My Notes](notes.md)
 
@@ -41,7 +41,7 @@ I am going to use the required technologies in the following ways.
 - **HTML** - Uses correct HTML structure for application. 3 Pages(One for login, one for posting, and one for viewing the map).
 - **CSS** - Styling that works on all screen sizes and looks good.
 - **React** - Allows user to interact with all the different key features stated above
-- **Service** - Retrieving recent catches and submitting catches
+- **Service** - Retrieving recent catches and submitting catches.
 - **DB/Login** - I will use a database to store login information as well as all the different information 
 - **WebSocket** - As people post their catches, it will be shown to other users
 
@@ -52,10 +52,10 @@ I am going to use the required technologies in the following ways.
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Git commit requirement)
-- [ ] Proper use of Markdown
-- [ ] A concise and compelling elevator pitch
-- [ ] Description of key features
+- [x] I completed the prerequisites for this deliverable (Git commit requirement)
+- [x] Proper use of Markdown
+- [x] A concise and compelling elevator pitch
+- [x] Description of key features
 - [ ] Description of how you will use each technology including your 3rd party API and use of WebSocket
 - [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
