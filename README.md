@@ -12,13 +12,13 @@ A brief description of the application here. Lorem ipsum dolor sit amet, consect
 
 ### Elevator pitch
 
-As a fisherman I have found that whenever you catch a good sized fish, you want to share that with your friends. The Fishing Tracker app will allow you to connect with people you know and share the adventures that you have been on. Once you have created an account you have the ability to post pictures and messages. There will also be an option to view information on local lakes and fishing spots that include recommended tactics to catch fish.
+All fisherman love to brag about some of the things that they have caught. Some of them even like to tell tall tales about experiences that they've had. The Fish Tracker App allows you to stay connected with all your fishing buddies by giving you the oppurtunity to show images and posts about the things that you've caught. It also gives you access to a map of all your local fishing spots.
 
 ### Design
 
 ![Design image](design.jpeg)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+This image describes the three different pages that I am going to have for my startup. The first one shows the login page that users will use to log in to their account. The next one shows the page with a map that will allow users to view fishing spots in their local areas. The last page is where users will post their catches and view some of the things that other people caught. 
 
 
 
@@ -52,7 +52,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] A concise and compelling elevator pitch
 - [x] Description of key features
 - [x] Description of how you will use each technology including your 3rd party API and use of WebSocket
-- [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
+- [x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ## 🚀 AWS deliverable
 
