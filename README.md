@@ -41,8 +41,8 @@ I am going to use the required technologies in the following ways.
 - **HTML** - Uses correct HTML structure for application. 3 Pages(One for login, one for posting, and one for viewing the map).
 - **CSS** - Styling that works on all screen sizes and looks good.
 - **React** - Allows user to interact with all the different key features stated above
-- **Service** - Retrieving recent catches and submitting catches.
-- **DB/Login** - I will use a database to store login information as well as all the different information 
+- **Service** - Retrieving recent catches and submitting catches. I will use a third party API by requesting a map such as google or apple maps to show local fishing locations.
+- **DB/Login** - I will use a database to store login information as well as all the different information that people post onto the app.
 - **WebSocket** - As people post their catches, it will be shown to other users
 
 ## 🚀 Specification Deliverable
@@ -56,7 +56,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] Proper use of Markdown
 - [x] A concise and compelling elevator pitch
 - [x] Description of key features
-- [ ] Description of how you will use each technology including your 3rd party API and use of WebSocket
+- [x] Description of how you will use each technology including your 3rd party API and use of WebSocket
 - [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ## 🚀 AWS deliverable
