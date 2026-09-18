@@ -18,7 +18,7 @@ So far I have learned how I am able to commit things into my github repository
 
 ## AWS
 
-Interesting things I have learned about AWS
+The collection of technologies that you use to create or deliver your web application is called a technology stack. Here is what my technology stack looks like: React for the web framework, talking to Caddy as the web server hosted on AWS, running web services with Node.js, and MongoDB as the database hosted on MongoDB Atlas.
 
 ## HTML
 
