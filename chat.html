@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Chat with the Fish Tracker community."
+    />
+    <title>Fish Tracker | Community chat</title>
+  </head>
+  <body>
+    <header>
+      <a href="index.html" aria-label="Fish Tracker home">
+        <img src="placeholder.png" alt="Fish Tracker logo placeholder" width="96" />
+      </a>
+      <h1>Community chat</h1>
+      <p>Trade tips, celebrate catches, and plan the next trip.</p>
+    </header>
+
+    <nav aria-label="Primary navigation">
+      <a href="index.html">Sign in</a>
+      <a href="map.html">Fishing map</a>
+      <a href="chat.html" aria-current="page">Community chat</a>
+    </nav>
+
+    <main>
+      <section aria-labelledby="chat-heading">
+        <h2 id="chat-heading">Live conversation</h2>
+        <p>Join the conversation with other Fish Tracker members.</p>
+
+        <!-- WebSocket placeholder: realtime messages will be received and displayed in this area. -->
+        <div id="chat-messages" aria-live="polite">
+          <p><strong>Live chat coming soon</strong></p>
+          <p>WebSocket messages will appear here when realtime communication is connected.</p>
+        </div>
+
+        <form action="#" method="post">
+          <label for="message">Message</label>
+          <input id="message" name="message" type="text" placeholder="Share a fishing tip" disabled />
+          <button type="submit" disabled>Send</button>
+        </form>
+      </section>
+
+      <section aria-labelledby="profile-heading">
+        <h2 id="profile-heading">Chat profile</h2>
+        <!-- Database placeholder: the signed-in user's name will come from stored account data. -->
+        <p>Posting as: <strong id="chat-username">Guest Angler</strong></p>
+        <p>Sign in to join the conversation.</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Fish Tracker</p>
+      <p>Keep it respectful, helpful, and close to the water.</p>
+    </footer>
+  </body>
+</html>
