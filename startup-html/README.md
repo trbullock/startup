@@ -64,16 +64,16 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **HTML pages** - I have 4 html pages: index.html, account.html, chat.html, and map.html
+- [x] **Proper HTML element usage** - I used html syntax correctly
+- [x] **Links** - All the pages are linked to one another along with the link to my GitHub in the footer
+- [x] **Text** - Each page has text describing what it is
+- [x] **3rd party API placeholder** - I have a placeholder for where I will put a map one day using a 3rd party API.
+- [ ] **Images** - I put a logo on the login page of my website
+- [x] **Login placeholder** - There is a login page and a page to create an account
+- [x] **DB data placeholder** - There is a place where you can login which will store your data in a a database
+- [x] **WebSocket placeholder** - There is a placeholder for a live chat
 
 ## 🚀 CSS deliverable
 
