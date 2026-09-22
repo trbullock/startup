@@ -14,7 +14,7 @@ All fisherman love to brag about some of the things that they have caught. Some 
 
 ### Design
 
-![Design image](design.jpeg)
+![Design image](images/design.jpeg)
 
 This image describes the three different pages that I am going to have for my startup. The first one shows the login page that users will use to log in to their account. The next one shows the page with a map that will allow users to view fishing spots in their local areas. The last page is where users will post their catches and view some of the things that other people caught. 
 
