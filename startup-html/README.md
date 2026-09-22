@@ -70,7 +70,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Links** - All the pages are linked to one another along with the link to my GitHub in the footer
 - [x] **Text** - Each page has text describing what it is
 - [x] **3rd party API placeholder** - I have a placeholder for where I will put a map one day using a 3rd party API.
-- [ ] **Images** - I put a logo on the login page of my website
+- [x] **Images** - I put a logo on the login page of my website
 - [x] **Login placeholder** - There is a login page and a page to create an account
 - [x] **DB data placeholder** - There is a place where you can login which will store your data in a a database
 - [x] **WebSocket placeholder** - There is a placeholder for a live chat
