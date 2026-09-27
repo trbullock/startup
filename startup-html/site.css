@@ -190,6 +190,7 @@ form label {
   color: #f5fbff;
   font-family: "Bebas Neue", sans-serif;
   font-size: 1.35rem;
+  text-align: center;
 }
 
 :focus-visible {
