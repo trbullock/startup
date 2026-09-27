@@ -83,9 +83,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Visually appealing colors and layout. No overflowing elements.** - Looks good and all the webpages match
 - [x] **Use of a CSS framework** - I used Bootstrap
 - [x] **All visual elements styled using CSS** - Everything is CSS
-- [ ] **Responsive to window resizing using flexbox and/or grid display** - 
-- [ ] **Use of a imported font** - I did not complete this part of the deliverable.
-- [ ] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I did not complete this part of the deliverable.
+- [x] **Responsive to window resizing using flexbox and/or grid display** - Looks good on all devices
+- [x] **Use of a imported font** - I used Bebas Neue on some of the text
+- [x] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I used all of them.s
 
 ## 🚀 React part 1: Routing deliverable
 
