@@ -1,0 +1,7 @@
+.account-page .content-panel:first-child {
+  flex-grow: 1.35;
+}
+
+.account-page form {
+  max-width: 38rem;
+}

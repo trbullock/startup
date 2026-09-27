@@ -1,0 +1,36 @@
+.chat-page #chat-messages {
+  min-height: 13rem;
+  margin: 1.25rem 0;
+  padding: 1.25rem;
+  background: #edf4f7;
+  border: 1px dashed #9cb8c7;
+  border-radius: 0.45rem;
+}
+
+.chat-page #chat-messages p:last-child {
+  margin-bottom: 0;
+  color: #5d7182;
+}
+
+.chat-page form {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+}
+
+.chat-page form label {
+  grid-column: 1 / -1;
+}
+
+.chat-page form .btn {
+  margin-top: 0;
+}
+
+@media (max-width: 420px) {
+  .chat-page form {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-page form .btn {
+    justify-self: stretch;
+  }
+}
