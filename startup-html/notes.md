@@ -22,7 +22,11 @@ The collection of technologies that you use to create or deliver your web applic
 
 ## HTML
 
-Interesting things I have learned about HTML
+When writing HTML just make sure that you get everything that you want on the screen. You will be able to style it later using CSS. It is much easier if you get all the HTML done before you start doing anything else like styling.
+
+## CSS
+
+In CSS there are frameworks that can make it much easier to style the website. The most popular one as of right now is Tailwind, however, it is much easier to learn Bootstrap. I can also use flex to make sure that the webpage will adjust based on how big the screen is.
 
 ## React
 
