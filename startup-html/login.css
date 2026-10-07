@@ -1,0 +1,7 @@
+.login-page .content-panel:first-child {
+  flex-grow: 1.25;
+}
+
+.login-page #username-display {
+  color: #176b8b;
+}
