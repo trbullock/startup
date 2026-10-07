@@ -3,7 +3,7 @@ import './map.css';
 
 export function Map() {
   return (
-    <main className="container-fluid bg-secondary text-center">
+    <main className="container page-main map-page">
       <section className="content-panel" aria-labelledby="map-heading">
         <h2 id="map-heading">Explore nearby water</h2>
         <p>Choose a spot to see local conditions, recent catches, and community notes.</p>

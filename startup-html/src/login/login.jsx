@@ -3,7 +3,7 @@ import './login.css';
 
 export function Login() {
   return (
-    <main className="container-fluid bg-secondary text-center">
+    <main className="container page-main login-page">
       <section className="content-panel" aria-labelledby="login-heading">
         <h2 id="login-heading">Welcome back, angler</h2>
         <p>Sign in to explore local fishing spots and keep up with your crew.</p>

@@ -3,7 +3,7 @@ import './account.css';
 
 export function Account() {
   return (
-    <main className="container-fluid bg-secondary text-center">
+    <main className="container page-main account-page">
       <section className="content-panel" aria-labelledby="account-heading">
         <h2 id="account-heading">Create your Fish Tracker account</h2>
         <p>Join local anglers, save your favorite spots, and share your catches.</p>

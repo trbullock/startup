@@ -3,7 +3,7 @@ import './chat.css';
 
 export function Chat() {
   return (
-    <main className="container-fluid bg-secondary text-center">
+    <main className="container page-main chat-page">
       <section className="content-panel" aria-labelledby="chat-heading">
         <h2 id="chat-heading">Live conversation</h2>
         <p>Join the conversation with other Fish Tracker members.</p>

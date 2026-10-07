@@ -11,18 +11,18 @@ import { Account } from './account/account';
 export default function App() {
   return (
   <BrowserRouter>
-    <div className="body bg-dark text-light">
-        <header class="site-header">
-        <a class="brand-mark" href="index.html" aria-label="Fish Tracker home">
+    <div className="body">
+      <header className="site-header">
+      <a className="brand-mark" href="index.html" aria-label="Fish Tracker home">
             <img src="/logo.png" alt="Fish Tracker logo" width="96" />
         </a>
-        <div class="brand-copy">
+      <div className="brand-copy">
             <h1>Fish Tracker</h1>
             <p>Find the water. Share the story.</p>
         </div>
         </header>
 
-        <nav class="site-nav" aria-label="Primary navigation">
+        <nav className="site-nav" aria-label="Primary navigation">
         <NavLink className="nav-link" to="/login" aria-current="page">Sign in</NavLink>
         <NavLink className="nav-link" to="/account">Create an account</NavLink>
         <NavLink className="nav-link" to="/map">Fishing map</NavLink>
@@ -37,7 +37,7 @@ export default function App() {
             <Route path='*' element={<NotFound />} />
         </Routes>
 
-        <footer class="site-footer">
+        <footer className="site-footer">
         <p>Thomas Bullock</p>
         <p>GitHub: <a href="https://github.com/trbullock/startup.git" target="_blank" rel="noopener noreferrer">Click Here</a></p>
         <p>Fishing stories are better when shared.</p>
