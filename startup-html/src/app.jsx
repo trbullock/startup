@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
 import { Chat } from './chat/chat';
 import { Map } from './map/map';
@@ -13,9 +13,9 @@ export default function App() {
   <BrowserRouter>
     <div className="body">
       <header className="site-header">
-      <a className="brand-mark" href="index.html" aria-label="Fish Tracker home">
+      <NavLink className="brand-mark" to="/login" aria-label="Fish Tracker home">
             <img src="/logo.png" alt="Fish Tracker logo" width="96" />
-        </a>
+      </NavLink>
       <div className="brand-copy">
             <h1>Fish Tracker</h1>
             <p>Find the water. Share the story.</p>
@@ -30,6 +30,7 @@ export default function App() {
         </nav>
 
         <Routes>
+          <Route path='/' element={<Navigate to="/login" replace />} />
             <Route path='/login' element={<Login />} exact />
             <Route path='/account' element={<Account />} />
             <Route path='/map' element={<Map />} />
