@@ -15,7 +15,7 @@ export function Chat() {
         </div>
 
         <form action="#" method="post">
-          <label for="message">Message</label>
+          <label htmlFor="message">Message</label>
           <input className="form-control" id="message" name="message" type="text" placeholder="Share a fishing tip" disabled />
           <button className="btn btn-primary" type="submit" disabled>Send</button>
         </form>

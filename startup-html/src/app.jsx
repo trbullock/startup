@@ -30,7 +30,7 @@ export default function App() {
         </nav>
 
         <Routes>
-          <Route path='/' element={<Navigate to="/login" replace />} />
+            <Route path='/' element={<Navigate to="/login" replace />} />
             <Route path='/login' element={<Login />} exact />
             <Route path='/account' element={<Account />} />
             <Route path='/map' element={<Map />} />

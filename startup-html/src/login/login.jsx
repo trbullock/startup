@@ -9,10 +9,10 @@ export function Login() {
         <p>Sign in to explore local fishing spots and keep up with your crew.</p>
 
         <form action="#" method="post">
-          <label for="username">Username</label>
+          <label htmlFor="username">Username</label>
           <input className="form-control" id="username" name="username" type="text" autocomplete="username" required />
 
-          <label for="password">Password</label>
+          <label htmlFor="password">Password</label>
           <input className="form-control" id="password" name="password" type="password" autocomplete="current-password" required />
 
           <button className="btn btn-primary" type="submit">Sign in</button>
