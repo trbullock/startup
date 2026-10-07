@@ -1,7 +1,13 @@
-.login-page .content-panel:first-child {
+/* .login-page .content-panel:first-child {
   flex-grow: 1.25;
 }
 
 .login-page #username-display {
   color: #176b8b;
+} */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  min-width: 375px;
 }
