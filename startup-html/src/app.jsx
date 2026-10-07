@@ -29,7 +29,13 @@ export default function App() {
         <NavLink className="nav-link" to="/chat">Community chat</NavLink>
         </nav>
 
-        <main>App Components go here</main>
+        <Routes>
+            <Route path='/login' element={<Login />} exact />
+            <Route path='/account' element={<Account />} />
+            <Route path='/map' element={<Map />} />
+            <Route path='/chat' element={<Chat />} />
+            <Route path='*' element={<NotFound />} />
+        </Routes>
 
         <footer class="site-footer">
         <p>Thomas Bullock</p>
@@ -40,4 +46,8 @@ export default function App() {
     </div>
   </BrowserRouter>
   );
+}
+
+function NotFound() {
+  return <main className="container-fluid bg-secondary text-center">404: Return to sender. Address unknown.</main>;
 }
