@@ -30,4 +30,13 @@ In CSS there are frameworks that can make it much easier to style the website. T
 
 ## React
 
-Interesting things I have learned about React
+When starting you need to setup NPM and initialise Vite inside your enviornment using the following commands:
+npm init -y
+npm install vite@latest -D
+Next you need to replace the scripts section inside of package.json with the follwing code:
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+
