@@ -37,7 +37,7 @@ export default function App() {
           <Route path='/login' element={<Login currentUser={currentUser} onAuthChange={setCurrentUser} />} exact />
           <Route path='/account' element={<Account onAuthChange={setCurrentUser} />} />
             <Route path='/map' element={<Map />} />
-            <Route path='/chat' element={<Chat />} />
+            <Route path='/chat' element={<Chat currentUser={currentUser} />} />
             <Route path='*' element={<NotFound />} />
         </Routes>
 
