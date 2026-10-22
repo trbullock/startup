@@ -36,8 +36,8 @@ export default function App() {
             <Route path='/' element={<Navigate to="/login" replace />} />
           <Route path='/login' element={<Login currentUser={currentUser} onAuthChange={setCurrentUser} />} exact />
           <Route path='/account' element={<Account onAuthChange={setCurrentUser} />} />
-            <Route path='/map' element={<Map />} />
-            <Route path='/chat' element={<Chat currentUser={currentUser} />} />
+            <Route path='/map' element={currentUser ? <Map /> : <Navigate to="/login" replace />} />
+            <Route path='/chat' element={currentUser ? <Chat currentUser={currentUser} /> : <Navigate to="/login" replace />} />
             <Route path='*' element={<NotFound />} />
         </Routes>
 
