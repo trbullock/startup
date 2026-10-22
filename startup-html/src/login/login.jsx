@@ -35,7 +35,6 @@ export function Login({ currentUser, onAuthChange }) {
         {currentUser ? (
           <>
             <p>You are signed in as <strong>{currentUser.displayName}</strong>.</p>
-            <button className="btn btn-secondary" type="button" onClick={handleSignOut}>Sign out</button>
             <section className="weather-placeholder" aria-labelledby="weather-heading">
               <h3 id="weather-heading">Local weather</h3>
               <label htmlFor="weather-location">Location</label>
@@ -51,6 +50,7 @@ export function Login({ currentUser, onAuthChange }) {
                 Weather for {weatherLocation || 'your area'} will appear here once the API is connected.
               </p>
             </section>
+            <button className="btn btn-secondary" type="button" onClick={handleSignOut}>Sign out</button>
           </>
         ) : (
           <form onSubmit={handleSubmit}>
