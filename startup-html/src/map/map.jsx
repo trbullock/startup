@@ -1,7 +1,18 @@
 import React from 'react';
 import './map.css';
 
+const popularSpots = [
+  { name: 'Willow Creek', details: 'Bass reported this week' },
+  { name: 'North Reservoir', details: 'Quiet shoreline access' },
+  { name: 'Pine Lake', details: 'Best at sunrise' },
+];
+
 export function Map() {
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const filteredSpots = popularSpots.filter((spot) => (
+    `${spot.name} ${spot.details}`.toLowerCase().includes(searchTerm.trim().toLowerCase())
+  ));
+
   return (
     <main className="container page-main map-page">
       <section className="content-panel" aria-labelledby="map-heading">
@@ -18,12 +29,24 @@ export function Map() {
 
       <section className="content-panel" aria-labelledby="spots-heading">
         <h2 id="spots-heading">Popular spots</h2>
-        {/*<!-- Database placeholder: these sample spots will be loaded from the application database. -->*/}
-        <ul>
-          <li><strong>Willow Creek</strong> &mdash; Bass reported this week</li>
-          <li><strong>North Reservoir</strong> &mdash; Quiet shoreline access</li>
-          <li><strong>Pine Lake</strong> &mdash; Best at sunrise</li>
-        </ul>
+        <label htmlFor="spot-search">Search fishing spots</label>
+        <input
+          className="form-control"
+          id="spot-search"
+          type="search"
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+          placeholder="Search by name or detail"
+        />
+        {filteredSpots.length > 0 ? (
+          <ul>
+            {filteredSpots.map((spot) => (
+              <li key={spot.name}><strong>{spot.name}</strong> &mdash; {spot.details}</li>
+            ))}
+          </ul>
+        ) : (
+          <p role="status">No fishing spots match “{searchTerm}”.</p>
+        )}
       </section>
     </main>
   );
