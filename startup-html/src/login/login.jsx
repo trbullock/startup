@@ -5,6 +5,7 @@ import './login.css';
 
 export function Login({ currentUser, onAuthChange }) {
   const [error, setError] = React.useState('');
+  const [weatherLocation, setWeatherLocation] = React.useState('Your area');
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -35,6 +36,21 @@ export function Login({ currentUser, onAuthChange }) {
           <>
             <p>You are signed in as <strong>{currentUser.displayName}</strong>.</p>
             <button className="btn btn-secondary" type="button" onClick={handleSignOut}>Sign out</button>
+            <section className="weather-placeholder" aria-labelledby="weather-heading">
+              <h3 id="weather-heading">Local weather</h3>
+              <label htmlFor="weather-location">Location</label>
+              <input
+                className="form-control"
+                id="weather-location"
+                type="text"
+                value={weatherLocation}
+                onChange={(event) => setWeatherLocation(event.target.value)}
+                placeholder="Enter a city or ZIP code"
+              />
+              <p aria-live="polite">
+                Weather for {weatherLocation || 'your area'} will appear here once the API is connected.
+              </p>
+            </section>
           </>
         ) : (
           <form onSubmit={handleSubmit}>
