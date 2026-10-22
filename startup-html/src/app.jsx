@@ -27,7 +27,7 @@ export default function App() {
 
         <nav className="site-nav" aria-label="Primary navigation">
         <NavLink className="nav-link" to="/login" aria-current="page">Sign in</NavLink>
-        <NavLink className="nav-link" to="/account">Create an account</NavLink>
+        {!currentUser && <NavLink className="nav-link" to="/account">Create an account</NavLink>}
         {currentUser && <NavLink className="nav-link" to="/map">Fishing map</NavLink>}
         {currentUser && <NavLink className="nav-link" to="/chat">Community chat</NavLink>}
         </nav>
