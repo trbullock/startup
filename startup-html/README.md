@@ -100,9 +100,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **All functionality implemented or mocked out** - Everything is working. Login data is stored in local storage(for now). Local storage is also used for the chat(for now).
+- [x] **Hooks** - I used useState for the login, search bar, and chat. I also used useNavigate on the account creation page.
 
 ## 🚀 Service deliverable
 
