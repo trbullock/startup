@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { createAccount } from '../login/authStorage';
 import './account.css';
 
-export function Account() {
+export function Account({ onAuthChange }) {
   const [error, setError] = React.useState('');
   const navigate = useNavigate();
 
@@ -18,12 +18,13 @@ export function Account() {
     }
 
     try {
-      createAccount({
+      const currentUser = createAccount({
         displayName: formData.get('display-name').trim(),
         email: formData.get('email').trim(),
         username: formData.get('username').trim(),
         password,
       });
+      onAuthChange(currentUser);
       navigate('/login');
     } catch (submitError) {
       setError(submitError.message);

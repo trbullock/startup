@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getCurrentUser, signIn, signOut } from './authStorage';
+import { signIn, signOut } from './authStorage';
 import './login.css';
 
-export function Login() {
-  const [currentUser, setCurrentUser] = React.useState(getCurrentUser);
+export function Login({ currentUser, onAuthChange }) {
   const [error, setError] = React.useState('');
 
   function handleSubmit(event) {
@@ -18,12 +17,12 @@ export function Login() {
     }
 
     setError('');
-    setCurrentUser(user);
+    onAuthChange(user);
   }
 
   function handleSignOut() {
     signOut();
-    setCurrentUser(null);
+    onAuthChange(null);
   }
 
   return (

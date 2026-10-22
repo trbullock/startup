@@ -7,8 +7,11 @@ import { Login } from './login/login';
 import { Chat } from './chat/chat';
 import { Map } from './map/map';
 import { Account } from './account/account';
+import { getCurrentUser } from './login/authStorage';
 
 export default function App() {
+  const [currentUser, setCurrentUser] = React.useState(getCurrentUser);
+
   return (
   <BrowserRouter>
     <div className="body">
@@ -25,14 +28,14 @@ export default function App() {
         <nav className="site-nav" aria-label="Primary navigation">
         <NavLink className="nav-link" to="/login" aria-current="page">Sign in</NavLink>
         <NavLink className="nav-link" to="/account">Create an account</NavLink>
-        <NavLink className="nav-link" to="/map">Fishing map</NavLink>
-        <NavLink className="nav-link" to="/chat">Community chat</NavLink>
+        {currentUser && <NavLink className="nav-link" to="/map">Fishing map</NavLink>}
+        {currentUser && <NavLink className="nav-link" to="/chat">Community chat</NavLink>}
         </nav>
 
         <Routes>
             <Route path='/' element={<Navigate to="/login" replace />} />
-            <Route path='/login' element={<Login />} exact />
-            <Route path='/account' element={<Account />} />
+          <Route path='/login' element={<Login currentUser={currentUser} onAuthChange={setCurrentUser} />} exact />
+          <Route path='/account' element={<Account onAuthChange={setCurrentUser} />} />
             <Route path='/map' element={<Map />} />
             <Route path='/chat' element={<Chat />} />
             <Route path='*' element={<NotFound />} />
