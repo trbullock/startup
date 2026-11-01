@@ -22,6 +22,8 @@ export function Map() {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [savedSpots, setSavedSpots] = React.useState(readSavedSpots);
   const [addError, setAddError] = React.useState('');
+  const [spotName, setSpotName] = React.useState('');
+  const [spotDetails, setSpotDetails] = React.useState('');
   const allSpots = [...popularSpots, ...savedSpots];
   const filteredSpots = allSpots.filter((spot) => (
     `${spot.name} ${spot.details}`.toLowerCase().includes(searchTerm.trim().toLowerCase())
@@ -29,9 +31,8 @@ export function Map() {
 
   function handleAddSpot(event) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const name = formData.get('spot-name').trim();
-    const details = formData.get('spot-details').trim();
+    const name = spotName.trim();
+    const details = spotDetails.trim();
 
     if (allSpots.some((spot) => spot.name.toLowerCase() === name.toLowerCase())) {
       setAddError('A spot with that name is already on the list.');
@@ -47,7 +48,8 @@ export function Map() {
       localStorage.setItem(SAVED_SPOTS_KEY, JSON.stringify(updatedSpots));
       setSavedSpots(updatedSpots);
       setAddError('');
-      event.currentTarget.reset();
+      setSpotName('');
+      setSpotDetails('');
     } catch {
       setAddError('The spot could not be saved in this browser.');
     }
@@ -80,9 +82,25 @@ export function Map() {
         />
         <form onSubmit={handleAddSpot}>
           <label htmlFor="spot-name">Spot name</label>
-          <input className="form-control" id="spot-name" name="spot-name" type="text" required />
+          <input
+            className="form-control"
+            id="spot-name"
+            name="spot-name"
+            type="text"
+            value={spotName}
+            onChange={(event) => setSpotName(event.target.value)}
+            required
+          />
           <label htmlFor="spot-details">Details</label>
-          <input className="form-control" id="spot-details" name="spot-details" type="text" required />
+          <input
+            className="form-control"
+            id="spot-details"
+            name="spot-details"
+            type="text"
+            value={spotDetails}
+            onChange={(event) => setSpotDetails(event.target.value)}
+            required
+          />
           {addError && <p role="alert">{addError}</p>}
           <button className="btn btn-primary" type="submit">Add spot</button>
         </form>

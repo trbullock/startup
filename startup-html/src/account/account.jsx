@@ -25,7 +25,7 @@ export function Account({ onAuthChange }) {
         password,
       });
       onAuthChange(currentUser);
-      navigate('/login');
+      navigate('/chat');
     } catch (submitError) {
       setError(submitError.message);
     }
