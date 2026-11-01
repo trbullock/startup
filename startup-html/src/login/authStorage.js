@@ -5,7 +5,8 @@ function readAccounts() {
   try {
     const accounts = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || '[]');
     return Array.isArray(accounts) ? accounts : [];
-  } catch {
+  } catch (error) {
+    console.error('Could not read saved accounts from local storage.', error);
     return [];
   }
 }
