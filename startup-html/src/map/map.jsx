@@ -1,57 +1,79 @@
 import React from 'react';
 import './map.css';
 
-const SAVED_SPOTS_KEY = 'fishTrackerSavedSpots';
-
-const popularSpots = [
-  { id: 'willow-creek', name: 'Willow Creek', details: 'Bass reported this week' },
-  { id: 'north-reservoir', name: 'North Reservoir', details: 'Quiet shoreline access' },
-  { id: 'pine-lake', name: 'Pine Lake', details: 'Best at sunrise' },
-];
-
-function readSavedSpots() {
-  try {
-    const savedSpots = JSON.parse(localStorage.getItem(SAVED_SPOTS_KEY) || '[]');
-    return Array.isArray(savedSpots) ? savedSpots : [];
-  } catch {
-    return [];
-  }
-}
-
 export function Map() {
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [savedSpots, setSavedSpots] = React.useState(readSavedSpots);
-  const [addError, setAddError] = React.useState('');
+  const [spots, setSpots] = React.useState([]);
+  const [error, setError] = React.useState('');
   const [spotName, setSpotName] = React.useState('');
   const [spotDetails, setSpotDetails] = React.useState('');
-  const allSpots = [...popularSpots, ...savedSpots];
-  const filteredSpots = allSpots.filter((spot) => (
-    `${spot.name} ${spot.details}`.toLowerCase().includes(searchTerm.trim().toLowerCase())
-  ));
+  const [loading, setLoading] = React.useState(true);
+  const [submitting, setSubmitting] = React.useState(false);
 
-  function handleAddSpot(event) {
+  React.useEffect(() => {
+    const controller = new AbortController();
+    const query = new URLSearchParams({ search: searchTerm.trim() });
+
+    async function searchSpots() {
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/spots?${query}`, {
+          credentials: 'include',
+          signal: controller.signal,
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.msg || 'Could not search fishing spots.');
+        }
+        setSpots(result);
+        setError('');
+      } catch (searchError) {
+        if (searchError.name !== 'AbortError') {
+          setError(searchError.message || 'Could not search fishing spots.');
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    searchSpots();
+    return () => controller.abort();
+  }, [searchTerm]);
+
+  async function handleAddSpot(event) {
     event.preventDefault();
     const name = spotName.trim();
     const details = spotDetails.trim();
 
-    if (allSpots.some((spot) => spot.name.toLowerCase() === name.toLowerCase())) {
-      setAddError('A spot with that name is already on the list.');
+    if (!name || !details) {
+      setError('Spot name and details are required.');
       return;
     }
 
-    const updatedSpots = [
-      ...savedSpots,
-      { id: `saved-${Date.now()}`, name, details },
-    ];
-
+    setSubmitting(true);
     try {
-      localStorage.setItem(SAVED_SPOTS_KEY, JSON.stringify(updatedSpots));
-      setSavedSpots(updatedSpots);
-      setAddError('');
+      const response = await fetch('/api/spots', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, details }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.msg || 'The spot could not be added.');
+      }
+
+      setError('');
       setSpotName('');
       setSpotDetails('');
-    } catch {
-      setAddError('The spot could not be saved in this browser.');
+      setSearchTerm('');
+      setSpots((currentSpots) => [...currentSpots, result]);
+    } catch (addSpotError) {
+      setError(addSpotError.message || 'The spot could not be added.');
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -101,17 +123,21 @@ export function Map() {
             onChange={(event) => setSpotDetails(event.target.value)}
             required
           />
-          {addError && <p role="alert">{addError}</p>}
-          <button className="btn btn-primary" type="submit">Add spot</button>
+          {error && <p role="alert">{error}</p>}
+          <button className="btn btn-primary" type="submit" disabled={submitting}>
+            {submitting ? 'Adding spot...' : 'Add spot'}
+          </button>
         </form>
-        {filteredSpots.length > 0 ? (
+        {loading ? (
+          <p role="status">Loading fishing spots...</p>
+        ) : spots.length > 0 ? (
           <ul>
-            {filteredSpots.map((spot) => (
+            {spots.map((spot) => (
               <li key={spot.id}><strong>{spot.name}</strong> &mdash; {spot.details}</li>
             ))}
           </ul>
         ) : (
-          <p role="status">No fishing spots match “{searchTerm}”.</p>
+          <p role="status">{searchTerm ? `No fishing spots match “${searchTerm}”.` : 'Add spots to see locations here.'}</p>
         )}
       </section>
     </main>
