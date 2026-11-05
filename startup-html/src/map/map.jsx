@@ -1,14 +1,128 @@
 import React from 'react';
 import './map.css';
 
+let googleMapsPromise;
+
+function loadGoogleMaps() {
+  if (window.google?.maps?.importLibrary) {
+    return Promise.resolve(window.google);
+  }
+
+  if (!googleMapsPromise) {
+    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+    if (!apiKey) {
+      return Promise.reject(new Error('Add VITE_GOOGLE_MAPS_API_KEY to .env.local, then restart Vite.'));
+    }
+
+    googleMapsPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      const params = new URLSearchParams({ key: apiKey, v: 'weekly' });
+      script.src = `https://maps.googleapis.com/maps/api/js?${params}`;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => resolve(window.google);
+      script.onerror = () => {
+        googleMapsPromise = null;
+        reject(new Error('Google Maps could not be loaded. Check the API key, billing, and API restrictions.'));
+      };
+      document.head.append(script);
+    });
+  }
+
+  return googleMapsPromise;
+}
+
 export function Map() {
+  const mapElementRef = React.useRef(null);
+  const placeSearchRef = React.useRef(null);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [spots, setSpots] = React.useState([]);
   const [error, setError] = React.useState('');
+  const [mapsError, setMapsError] = React.useState('');
+  const [mapsLoading, setMapsLoading] = React.useState(true);
+  const [selectedPlace, setSelectedPlace] = React.useState(null);
   const [spotName, setSpotName] = React.useState('');
   const [spotDetails, setSpotDetails] = React.useState('');
   const [loading, setLoading] = React.useState(true);
   const [submitting, setSubmitting] = React.useState(false);
+
+  React.useEffect(() => {
+    let active = true;
+    let autocompleteElement;
+    let placeSelectHandler;
+    let map;
+    let marker;
+
+    async function initializeMap() {
+      try {
+        const google = await loadGoogleMaps();
+        const [{ Map: GoogleMap }, { PlaceAutocompleteElement }] = await Promise.all([
+          google.maps.importLibrary('maps'),
+          google.maps.importLibrary('places'),
+        ]);
+        if (!active) return;
+
+        map = new GoogleMap(mapElementRef.current, {
+          center: { lat: 47.6062, lng: -122.3321 },
+          zoom: 10,
+          mapTypeControl: false,
+          streetViewControl: false,
+        });
+        autocompleteElement = new PlaceAutocompleteElement();
+        autocompleteElement.setAttribute('aria-labelledby', 'google-place-search-label');
+        autocompleteElement.setAttribute('placeholder', 'Search for a place');
+        placeSearchRef.current.replaceChildren(autocompleteElement);
+
+        placeSelectHandler = async (event) => {
+          try {
+            const place = event.placePrediction.toPlace();
+            await place.fetchFields({ fields: ['displayName', 'formattedAddress', 'location'] });
+            if (!active || !place.location) return;
+
+            map.panTo(place.location);
+            map.setZoom(14);
+            if (marker) {
+              marker.setPosition(place.location);
+              marker.setTitle(place.displayName?.text || 'Selected place');
+            } else {
+              marker = new google.maps.Marker({
+                map,
+                position: place.location,
+                title: place.displayName?.text || 'Selected place',
+              });
+            }
+            setSelectedPlace({
+              name: place.displayName?.text || 'Selected place',
+              address: place.formattedAddress || '',
+            });
+            setMapsError('');
+          } catch (placeError) {
+            if (active) {
+              setMapsError(placeError.message || 'Could not load the selected place.');
+            }
+          }
+        };
+        autocompleteElement.addEventListener('gmp-select', placeSelectHandler);
+        setMapsError('');
+      } catch (mapError) {
+        if (active) {
+          setMapsError(mapError.message || 'Google Maps could not be initialized.');
+        }
+      } finally {
+        if (active) setMapsLoading(false);
+      }
+    }
+
+    initializeMap();
+    return () => {
+      active = false;
+      if (autocompleteElement && placeSelectHandler) {
+        autocompleteElement.removeEventListener('gmp-select', placeSelectHandler);
+      }
+      placeSearchRef.current?.replaceChildren();
+      if (marker) marker.setMap(null);
+    };
+  }, []);
 
   React.useEffect(() => {
     const controller = new AbortController();
@@ -83,12 +197,21 @@ export function Map() {
         <h2 id="map-heading">Explore nearby water</h2>
         <p>Choose a spot to see local conditions, recent catches, and community notes.</p>
 
-        {/*<!-- Third-party service placeholder: a map provider will render the interactive map here. -->*/}
-        <div id="map-container" className="map-placeholder" role="img" aria-label="Interactive fishing map coming soon">
-          <h3>Interactive map coming soon</h3>
-          <img src="/placeholder.png" alt="Future interactive fishing map" width="150"/>
-          <p>Map provider integration will display lakes, rivers, and saved fishing spots here.</p>
-        </div>
+        <p id="google-place-search-label">Search Google Maps for a place</p>
+        <div id="google-place-search" ref={placeSearchRef} className="google-place-search" />
+        {mapsLoading && <p role="status">Loading Google Maps...</p>}
+        {mapsError && <p role="alert">{mapsError}</p>}
+        {selectedPlace && (
+          <p role="status">
+            Showing <strong>{selectedPlace.name}</strong>
+            {selectedPlace.address ? ` — ${selectedPlace.address}` : ''}
+          </p>
+        )}
+        <div
+          id="map-container"
+          ref={mapElementRef}
+          aria-label="Google map. Search for a place to show it on the map."
+        />
       </section>
 
       <section className="content-panel" aria-labelledby="spots-heading">
