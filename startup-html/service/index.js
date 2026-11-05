@@ -123,6 +123,78 @@ apiRouter.post('/chat/messages', verifyAuth, (req, res) => {
   res.status(201).send(message);
 });
 
+apiRouter.get('/weather', verifyAuth, async (req, res, next) => {
+  const location = typeof req.query.location === 'string' ? req.query.location.trim() : '';
+  if (!location) {
+    res.status(400).send({ msg: 'Enter a city or ZIP code' });
+    return;
+  }
+
+  try {
+    const geocodingUrl = new URL('https://geocoding-api.open-meteo.com/v1/search');
+    geocodingUrl.searchParams.set('name', location);
+    geocodingUrl.searchParams.set('count', '1');
+    geocodingUrl.searchParams.set('language', 'en');
+    geocodingUrl.searchParams.set('format', 'json');
+
+    const geocodingResponse = await fetch(geocodingUrl);
+    if (!geocodingResponse.ok) {
+      res.status(502).send({ msg: 'The location lookup service is unavailable.' });
+      return;
+    }
+
+    const geocodingData = await geocodingResponse.json();
+    const result = geocodingData.results?.[0];
+    if (!result) {
+      res.status(404).send({ msg: 'No matching location was found.' });
+      return;
+    }
+
+    const pointsUrl = `https://api.weather.gov/points/${result.latitude},${result.longitude}`;
+    const pointsResponse = await fetch(pointsUrl, {
+      headers: { 'User-Agent': 'FishTracker/1.0 (weather forecast feature)' },
+    });
+    if (!pointsResponse.ok) {
+      res.status(502).send({ msg: 'Weather.gov could not provide a forecast for that location.' });
+      return;
+    }
+
+    const pointsData = await pointsResponse.json();
+    const forecastUrl = pointsData.properties?.forecast;
+    if (!forecastUrl) {
+      res.status(502).send({ msg: 'Weather.gov did not return a forecast for that location.' });
+      return;
+    }
+    if (new URL(forecastUrl).origin !== 'https://api.weather.gov') {
+      res.status(502).send({ msg: 'Weather.gov returned an invalid forecast URL.' });
+      return;
+    }
+
+    const forecastResponse = await fetch(forecastUrl, {
+      headers: { 'User-Agent': 'FishTracker/1.0 (weather forecast feature)' },
+    });
+    if (!forecastResponse.ok) {
+      res.status(502).send({ msg: 'The forecast service is unavailable.' });
+      return;
+    }
+
+    const forecastData = await forecastResponse.json();
+    res.send({
+      location: [result.name, result.admin1, result.country].filter(Boolean).join(', '),
+      periods: (forecastData.properties?.periods || []).slice(0, 4).map((period) => ({
+        name: period.name,
+        temperature: period.temperature,
+        temperatureUnit: period.temperatureUnit,
+        shortForecast: period.shortForecast,
+        windSpeed: period.windSpeed,
+        windDirection: period.windDirection,
+      })),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 apiRouter.get('/auth/me', verifyAuth, (req, res) => {
   res.send(publicUser(req.authUser));
 });
