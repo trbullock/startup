@@ -5,9 +5,10 @@ import './account.css';
 
 export function Account({ onAuthChange }) {
   const [error, setError] = React.useState('');
+  const [submitting, setSubmitting] = React.useState(false);
   const navigate = useNavigate();
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const password = formData.get('password');
@@ -17,8 +18,9 @@ export function Account({ onAuthChange }) {
       return;
     }
 
+    setSubmitting(true);
     try {
-      const currentUser = createAccount({
+      const currentUser = await createAccount({
         displayName: formData.get('display-name').trim(),
         email: formData.get('email').trim(),
         username: formData.get('username').trim(),
@@ -27,7 +29,11 @@ export function Account({ onAuthChange }) {
       onAuthChange(currentUser);
       navigate('/chat');
     } catch (submitError) {
-      setError(submitError.message);
+      setError(submitError.status === 409
+        ? 'That email or username is already registered.'
+        : submitError.message);
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -54,14 +60,15 @@ export function Account({ onAuthChange }) {
           <input className="form-control" id="confirm-password" name="confirm-password" type="password" autoComplete="new-password" required />
 
           {error && <p role="alert">{error}</p>}
-          <button className="btn btn-primary" type="submit">Create account</button>
+          <button className="btn btn-primary" type="submit" disabled={submitting}>
+            {submitting ? 'Creating account...' : 'Create account'}
+          </button>
         </form>
       </section>
 
       <section className="content-panel" aria-labelledby="account-data-heading">
-        <h2 id="account-data-heading">Account data</h2>
-        {/*<!-- Database placeholder: registration details will be stored securely by the server. -->*/}
-        <p>Your profile, saved spots, and catches will be stored with your account.</p>
+      <h2 id="account-data-heading">Account data</h2>
+      <p>Your profile is stored by the service for this session. Saved spots and catches are not connected yet.</p>
       </section>
     </main>
   );

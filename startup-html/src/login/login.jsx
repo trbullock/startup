@@ -6,24 +6,36 @@ import './login.css';
 export function Login({ currentUser, onAuthChange }) {
   const [error, setError] = React.useState('');
   const [weatherLocation, setWeatherLocation] = React.useState('Your area');
+  const [submitting, setSubmitting] = React.useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const user = signIn(formData.get('username'), formData.get('password'));
-
-    if (!user) {
-      setError('Username or password is incorrect.');
-      return;
+    setSubmitting(true);
+    try {
+      const user = await signIn(formData.get('email'), formData.get('password'));
+      setError('');
+      onAuthChange(user);
+    } catch (submitError) {
+      setError(submitError.status === 401
+        ? 'Email or password is incorrect.'
+        : 'Unable to sign in. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
-
-    setError('');
-    onAuthChange(user);
   }
 
-  function handleSignOut() {
-    signOut();
-    onAuthChange(null);
+  async function handleSignOut() {
+    setSubmitting(true);
+    try {
+      await signOut();
+      setError('');
+      onAuthChange(null);
+    } catch {
+      setError('Unable to sign out. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -50,18 +62,23 @@ export function Login({ currentUser, onAuthChange }) {
                 Weather for {weatherLocation || 'your area'} will appear here once the API is connected.
               </p>
             </section>
-            <button className="btn btn-secondary" type="button" onClick={handleSignOut}>Sign out</button>
+            {error && <p role="alert">{error}</p>}
+            <button className="btn btn-secondary" type="button" onClick={handleSignOut} disabled={submitting}>
+              {submitting ? 'Signing out...' : 'Sign out'}
+            </button>
           </>
         ) : (
           <form onSubmit={handleSubmit}>
-            <label htmlFor="username">Username</label>
-            <input className="form-control" id="username" name="username" type="text" autoComplete="username" required />
+            <label htmlFor="email">Email address</label>
+            <input className="form-control" id="email" name="email" type="email" autoComplete="email" required />
 
             <label htmlFor="password">Password</label>
             <input className="form-control" id="password" name="password" type="password" autoComplete="current-password" required />
 
             {error && <p role="alert">{error}</p>}
-            <button className="btn btn-primary" type="submit">Sign in</button>
+            <button className="btn btn-primary" type="submit" disabled={submitting}>
+              {submitting ? 'Signing in...' : 'Sign in'}
+            </button>
           </form>
         )}
         {!currentUser && <p><Link to="/account">Create an account</Link></p>}
@@ -71,7 +88,7 @@ export function Login({ currentUser, onAuthChange }) {
         <h2 id="account-heading">Current user</h2>
         <p>Signed in as: <strong id="username-display">{currentUser ? currentUser.displayName : 'Guest Angler'}</strong></p>
         <p>{currentUser ? `Username: ${currentUser.username}` : 'Sign in or create an account to get started.'}</p>
-        <p>Demo only: account details are stored in this browser. Do not use a real password.</p>
+        <p>Passwords are hashed by the service. Account data is currently held in service memory.</p>
       </section>
     </main>
   );

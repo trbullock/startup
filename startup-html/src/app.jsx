@@ -10,7 +10,26 @@ import { Account } from './account/account';
 import { getCurrentUser } from './login/authStorage';
 
 export default function App() {
-  const [currentUser, setCurrentUser] = React.useState(getCurrentUser);
+  const [currentUser, setCurrentUser] = React.useState(null);
+  const [authLoading, setAuthLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    let active = true;
+    getCurrentUser()
+      .then((user) => {
+        if (active) setCurrentUser(user);
+      })
+      .catch((error) => {
+        console.error('Could not restore the signed-in user.', error);
+      })
+      .finally(() => {
+        if (active) setAuthLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
   <BrowserRouter>
@@ -28,16 +47,16 @@ export default function App() {
         <nav className="site-nav" aria-label="Primary navigation">
         <NavLink className="nav-link" to="/login" aria-current="page">Sign in</NavLink>
         {!currentUser && <NavLink className="nav-link" to="/account">Create an account</NavLink>}
-        {currentUser && <NavLink className="nav-link" to="/map">Fishing map</NavLink>}
-        {currentUser && <NavLink className="nav-link" to="/chat">Community chat</NavLink>}
+        {!authLoading && currentUser && <NavLink className="nav-link" to="/map">Fishing map</NavLink>}
+        {!authLoading && currentUser && <NavLink className="nav-link" to="/chat">Community chat</NavLink>}
         </nav>
 
         <Routes>
             <Route path='/' element={<Navigate to="/login" replace />} />
           <Route path='/login' element={<Login currentUser={currentUser} onAuthChange={setCurrentUser} />} exact />
           <Route path='/account' element={<Account onAuthChange={setCurrentUser} />} />
-            <Route path='/map' element={currentUser ? <Map /> : <Navigate to="/login" replace />} />
-            <Route path='/chat' element={currentUser ? <Chat currentUser={currentUser} /> : <Navigate to="/login" replace />} />
+            <Route path='/map' element={authLoading ? <p>Checking sign-in...</p> : currentUser ? <Map /> : <Navigate to="/login" replace />} />
+            <Route path='/chat' element={authLoading ? <p>Checking sign-in...</p> : currentUser ? <Chat currentUser={currentUser} /> : <Navigate to="/login" replace />} />
             <Route path='*' element={<NotFound />} />
         </Routes>
 
