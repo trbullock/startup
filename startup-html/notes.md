@@ -40,3 +40,16 @@ Next you need to replace the scripts section inside of package.json with the fol
     "preview": "vite preview"
   }
 
+## Service
+
+## Database
+
+Plan for connecting the service to MongoDB:
+
+1. Complete the MongoDB connection in `service/database.js`. Confirm the database configuration is available and add the MongoDB driver to `service/package.json`.
+2. Update `service/index.js` to wait for a successful database connection before starting the server.
+3. Replace the in-memory `users`, `spots`, and `chatMessages` arrays with MongoDB collections.
+4. Update signup, login, logout, and authentication lookup; spot search and creation; and chat history and message creation to use the database. Keep the existing API routes and response formats.
+5. Preserve password hashing and duplicate-user checks, and handle database errors through the service's error handling.
+6. Test the auth, spot, and chat endpoints, restart the service, and confirm the data persists.
+
