@@ -1,17 +1,26 @@
 const path = require('node:path');
 const dotenv = require('dotenv');
 const { MongoClient } = require('mongodb');
+const credentials = require('./dbCredentials.json');
 
 const envResult = dotenv.config({ path: path.join(__dirname, '.env.local') });
 if (envResult.error && envResult.error.code !== 'ENOENT') {
   throw envResult.error;
 }
 
-const uri = process.env.MONGODB_URI;
-if (!uri) {
-  throw new Error('MONGODB_URI must be set in service/.env.local or the service environment');
+if (
+  typeof credentials.username !== 'string'
+  || !credentials.username
+  || typeof credentials.password !== 'string'
+  || !credentials.password
+  || typeof credentials.hostname !== 'string'
+  || !credentials.hostname.trim()
+) {
+  throw new Error('service/dbCredentials.json must contain username, password, and hostname strings');
 }
 
+const hostname = credentials.hostname.trim();
+const uri = `mongodb+srv://${credentials.username}:${credentials.password}@${hostname}`;
 const client = new MongoClient(uri);
 const db = client.db(process.env.MONGODB_DATABASE || 'startup');
 
