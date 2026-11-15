@@ -5,9 +5,9 @@ const uuid = require('uuid');
 const app = express();
 
 const authCookieName = 'token';
-let users = [];
-let spots = [];
-let chatMessages = [];
+let userCollection;
+let popularSpotsCollection;
+let chatMessagesCollection;
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
@@ -29,7 +29,11 @@ apiRouter.post('/auth/create', async (req, res) => {
     return;
   }
 
-  if (await findUser('email', email) || users.some((user) => user.username.toLowerCase() === username.toLowerCase())) {
+  const existingUsername = await userCollection.findOne(
+    { username },
+    { collation: { locale: 'en', strength: 2 } },
+  );
+  if (await findUser('email', email) || existingUsername) {
     res.status(409).send({ msg: 'Existing user' });
     return;
   }
@@ -45,6 +49,7 @@ apiRouter.post('/auth/login', async (req, res) => {
   const user = await findUser('email', email);
   if (user && typeof password === 'string' && (await bcrypt.compare(password, user.password))) {
     user.token = uuid.v4();
+    await userCollection.updateOne({ _id: user._id }, { $set: { token: user.token } });
     setAuthCookie(res, user.token);
     res.send(publicUser(user));
     return;
@@ -56,7 +61,7 @@ apiRouter.post('/auth/login', async (req, res) => {
 apiRouter.delete('/auth/logout', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
-    delete user.token;
+    await userCollection.updateOne({ _id: user._id }, { $unset: { token: '' } });
   }
 
   res.clearCookie(authCookieName);
@@ -74,15 +79,22 @@ const verifyAuth = async (req, res, next) => {
   res.status(401).send({ msg: 'Unauthorized' });
 };
 
-apiRouter.get('/spots', verifyAuth, (req, res) => {
+apiRouter.get('/spots', verifyAuth, async (req, res) => {
   const searchTerm = typeof req.query.search === 'string' ? req.query.search.trim().toLowerCase() : '';
-  const matchingSpots = spots.filter((spot) => (
-    `${spot.name} ${spot.details}`.toLowerCase().includes(searchTerm)
-  ));
+  const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const matchingSpots = await popularSpotsCollection.find(
+    {
+      $or: [
+        { name: { $regex: escapedSearchTerm, $options: 'i' } },
+        { details: { $regex: escapedSearchTerm, $options: 'i' } },
+      ],
+    },
+    { projection: { _id: 0 } },
+  ).toArray();
   res.send(matchingSpots);
 });
 
-apiRouter.post('/spots', verifyAuth, (req, res) => {
+apiRouter.post('/spots', verifyAuth, async (req, res) => {
   const name = typeof req.body?.name === 'string' ? req.body.name.trim() : '';
   const details = typeof req.body?.details === 'string' ? req.body.details.trim() : '';
 
@@ -91,21 +103,29 @@ apiRouter.post('/spots', verifyAuth, (req, res) => {
     return;
   }
 
-  if (spots.some((spot) => spot.name.toLowerCase() === name.toLowerCase())) {
+  const existingSpot = await popularSpotsCollection.findOne(
+    { name },
+    { collation: { locale: 'en', strength: 2 } },
+  );
+  if (existingSpot) {
     res.status(409).send({ msg: 'A spot with that name already exists' });
     return;
   }
 
   const spot = { id: uuid.v4(), name, details };
-  spots.push(spot);
+  await popularSpotsCollection.insertOne({ ...spot });
   res.status(201).send(spot);
 });
 
-apiRouter.get('/chat/messages', verifyAuth, (_req, res) => {
-  res.send(chatMessages);
+apiRouter.get('/chat/messages', verifyAuth, async (_req, res) => {
+  const messages = await chatMessagesCollection.find(
+    {},
+    { projection: { _id: 0 } },
+  ).sort({ _id: 1 }).toArray();
+  res.send(messages);
 });
 
-apiRouter.post('/chat/messages', verifyAuth, (req, res) => {
+apiRouter.post('/chat/messages', verifyAuth, async (req, res) => {
   const text = typeof req.body?.text === 'string' ? req.body.text.trim() : '';
 
   if (!text) {
@@ -119,7 +139,7 @@ apiRouter.post('/chat/messages', verifyAuth, (req, res) => {
     text,
     sentAt: new Date().toISOString(),
   };
-  chatMessages.push(message);
+  await chatMessagesCollection.insertOne({ ...message });
   res.status(201).send(message);
 });
 
@@ -218,13 +238,13 @@ async function createUser(email, password, username, displayName) {
     token: uuid.v4(),
   };
 
-  users.push(user);
+  await userCollection.insertOne({ ...user });
   return user;
 }
 
 async function findUser(field, value) {
   if (!value) return null;
-  return users.find((u) => u[field] === value);
+  return userCollection.findOne({ [field]: value });
 }
 
 function publicUser(user) {
@@ -245,8 +265,11 @@ function setAuthCookie(res, authToken) {
 }
 
 async function startServer() {
-  const { connectToDatabase } = require('./database');
-  await connectToDatabase();
+  const database = require('./database');
+  await database.connectToDatabase();
+  userCollection = database.userCollection;
+  popularSpotsCollection = database.popularSpotsCollection;
+  chatMessagesCollection = database.chatMessagesCollection;
 
   app.listen(port, () => {
     console.log(`Listening on port ${port}`);
