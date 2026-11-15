@@ -5,6 +5,7 @@ const uuid = require('uuid');
 const app = express();
 
 const authCookieName = 'token';
+const userIdentityCollation = { locale: 'en', strength: 2 };
 let userCollection;
 let popularSpotsCollection;
 let chatMessagesCollection;
@@ -31,14 +32,23 @@ apiRouter.post('/auth/create', async (req, res) => {
 
   const existingUsername = await userCollection.findOne(
     { username },
-    { collation: { locale: 'en', strength: 2 } },
+    { collation: userIdentityCollation },
   );
   if (await findUser('email', email) || existingUsername) {
     res.status(409).send({ msg: 'Existing user' });
     return;
   }
 
-  const user = await createUser(email, password, username, displayName);
+  let user;
+  try {
+    user = await createUser(email, password, username, displayName);
+  } catch (error) {
+    if (error instanceof Error && error.code === 11000) {
+      res.status(409).send({ msg: 'Existing user' });
+      return;
+    }
+    throw error;
+  }
   setAuthCookie(res, user.token);
   res.send(publicUser(user));
 });
@@ -219,8 +229,12 @@ apiRouter.get('/auth/me', verifyAuth, (req, res) => {
   res.send(publicUser(req.authUser));
 });
 
-app.use((err, req, res, next) => {
-  res.status(500).send({ type: err.name, message: err.message });
+app.use((err, _req, res, _next) => {
+  console.error('Unhandled service request error:', err);
+  res.status(500).send({
+    type: err instanceof Error ? err.name : 'Error',
+    message: 'Internal server error',
+  });
 });
 
 app.use((_req, res) => {
@@ -244,7 +258,8 @@ async function createUser(email, password, username, displayName) {
 
 async function findUser(field, value) {
   if (!value) return null;
-  return userCollection.findOne({ [field]: value });
+  const options = field === 'email' ? { collation: userIdentityCollation } : {};
+  return userCollection.findOne({ [field]: value }, options);
 }
 
 function publicUser(user) {
@@ -278,6 +293,6 @@ async function startServer() {
 
 startServer().catch((error) => {
   const message = error instanceof Error ? error.message : String(error);
-  console.error(`Unable to start service because MongoDB connection failed: ${message}`);
+  console.error(`Unable to start service during MongoDB initialization: ${message}`);
   process.exitCode = 1;
 });
