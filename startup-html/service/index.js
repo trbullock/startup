@@ -244,6 +244,17 @@ function setAuthCookie(res, authToken) {
   });
 }
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+async function startServer() {
+  const { connectToDatabase } = require('./database');
+  await connectToDatabase();
+
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  });
+}
+
+startServer().catch((error) => {
+  const message = error instanceof Error ? error.message : String(error);
+  console.error(`Unable to start service because MongoDB connection failed: ${message}`);
+  process.exitCode = 1;
 });
