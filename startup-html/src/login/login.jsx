@@ -141,7 +141,7 @@ export function Login({ currentUser, onAuthChange }) {
         <h2 id="account-heading">Current user</h2>
         <p>Signed in as: <strong id="username-display">{currentUser ? currentUser.displayName : 'Guest Angler'}</strong></p>
         <p>{currentUser ? `Username: ${currentUser.username}` : 'Sign in or create an account to get started.'}</p>
-        <p>Passwords are hashed by the service. Account data is currently held in service memory.</p>
+        <p>Passwords are hashed by the service. Account data is stored in MongoDB.</p>
       </section>
     </main>
   );

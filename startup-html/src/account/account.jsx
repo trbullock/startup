@@ -68,7 +68,7 @@ export function Account({ onAuthChange }) {
 
       <section className="content-panel" aria-labelledby="account-data-heading">
       <h2 id="account-data-heading">Account data</h2>
-      <p>Your profile is stored by the service for this session. Saved spots and catches are not connected yet.</p>
+      <p>Your profile, fishing spots, and chat messages are stored in MongoDB. Catch tracking is not available yet.</p>
       </section>
     </main>
   );
